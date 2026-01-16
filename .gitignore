@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Playwright reports
+playwright-report/
+test-results/
+
+# Custom reports
+reports/
+screenshots/
+
+# Logs
+*.log
+
+# Environment variables
+.env
