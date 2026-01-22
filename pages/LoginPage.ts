@@ -1,25 +1,37 @@
-import { error } from 'node:console';
-import { Page } from 'playwright';
+import { Page, expect } from '@playwright/test';
 
 export class LoginPage {
-  private page: Page;
+  constructor(private page: Page) {}
 
-  constructor(page: Page) {
-    this.page = page;
-  }
+  private usernameInput = '#user-name';
+  private passwordInput = '#password';
+  private loginButton = '#login-button';
+  private errorMessage = '[data-test="error"]';
 
   async navigate() {
-    await this.page.goto('https://www.saucedemo.com');
+    await this.page.goto('https://www.saucedemo.com/');
   }
 
-  async login(user: string, pass: string): Promise<void> {
-  await this.page.fill('#user-name', user);
-  await this.page.fill('#password', pass);
-  await this.page.click('#login-button');
-
-  if (await this.page.isVisible('.error-button')){
-    throw error("ERROR, Problema al iniciar sesión")
+  async login(username: string, password: string) {
+    if (username) await this.page.fill(this.usernameInput, username);
+    if (password) await this.page.fill(this.passwordInput, password);
+    await this.page.click(this.loginButton);
   }
-}
+
+  async expectInventoryPage() {
+    await expect(this.page).toHaveURL(/inventory.html/);
+  }
+
+  async expectError() {
+    await expect(this.page.locator(this.errorMessage)).toBeVisible();
+  }
+
+  async getErrorText() {
+    return await this.page.locator(this.errorMessage).innerText();
+  }
+
+  async getErrorMessage(): Promise<string> {
+  return await this.page.locator(this.errorMessage).innerText();
+  }
 
 }

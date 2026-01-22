@@ -45,6 +45,12 @@ Before(async function (scenario) {
   browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   page = await context.newPage();
+
+  //PAGES
+  this.page = page;
+  this.browser = browser;
+  this.context = context;
+
 });
 
 AfterStep(async function ({ pickleStep, result }) {
@@ -72,8 +78,10 @@ AfterStep(async function ({ pickleStep, result }) {
 });
 
 
-After(async function () {
+
+After({ timeout: 20000 }, async function () {
   generatePdfReport(executionMetadata, stepEvidences);
+  await page.pause();
   await browser.close();
 });
 

@@ -26,37 +26,48 @@ Este proyecto automatiza el flujo de **login exitoso** en la aplicación de prue
 
 ---
 
+## World Configuration
+
+El framework utiliza un `Custom World` para compartir el estado del navegador
+por escenario, permitiendo escalabilidad y ejecución paralela.
+
+- `world.ts` gestiona browser, context y page
+- Cada escenario tiene su propia instancia
+- Evita el uso de variables globales
+
+
 ##  Estructura del Proyecto
 ## Project Structure
 
 ```txt
-PLAYWRIGHT-AUTOMATION-FRAMEWORK/
+playwright-automation-framework/
 │
-├─ core/                # Utilidades y clases compartidas
-│   ├─ Logger.ts        # Manejo de logs de ejecución
-│   └─ PdfReport.ts     # Generación de reportes PDF
-│  
+├── features/                # Features Gherkin (.feature)
+│   └── auth/
+│       └── login.feature
+│       └── logout.feature
 │
-├─ features/            # Archivos .feature de Cucumber
-│   └─ login.feature
+├── steps/                   # Step Definitions
+│   └── login.steps.ts
+│   └── auth.steps.ts
 │
-├─ pages/               # Páginas de la aplicación (Page Object Model)
-│   └─ LoginPage.ts
+├── pages/                   # Page Objects
+│   └── LoginPage.ts
+│   └── InventoryPage.ts
 │
-├─ reports/             # Reportes de ejecución
-│   ├─ logs/            # Archivos de log
-│   │   └─ execution.log
-│   ├─ pdf/             # Reportes PDF
-│   │   └─ Login_con_credenciales.pdf
-│   └─ screenshots/     # Capturas de pantalla de pruebas
+tests/
+├── hooks.ts                # Hooks Before / After / AfterStep
+├── world.ts                # Enviromets and this.page
 │
-├─ steps/               # Definición de pasos de Cucumber
-│   └─ login.steps.ts
+├── core/
+│   └── Logger.ts
+│   └── PdfReport.ts
 │
-├─ tests/               # Hooks y configuraciones globales
-│   └─ hooks.ts
+├── reports/
+│   └── screenshots/          # Evidencias por escenario
 │
-├─ cucumber.js          # Configuración de Cucumber
-├─ package.json         # Dependencias y scripts
-├─ tsconfig.json        # Configuración de TypeScript
-└─ README.md            # Este archivo
+├── cucumber.js               # Configuración Cucumber
+├── package.json
+├── tsconfig.json
+└── README.md
+
